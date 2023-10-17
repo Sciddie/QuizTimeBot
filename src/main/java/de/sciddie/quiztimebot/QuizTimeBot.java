@@ -1,5 +1,6 @@
 package de.sciddie.quiztimebot;
 
+import de.sciddie.quiztimebot.listeners.EventListener;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
@@ -15,6 +16,7 @@ public class QuizTimeBot {
                 .setStatus(OnlineStatus.ONLINE)
                 .setActivity(Activity.customStatus("Is watching you"));
         shardManager = builder.build();
+        shardManager.addEventListener(new EventListener());
     }
 
     public static void main(String[] args) {
