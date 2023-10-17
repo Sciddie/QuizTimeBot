@@ -11,6 +11,7 @@ public class EventListener extends ListenerAdapter {
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
+        event.getChannel().getId();
     }
 
 
