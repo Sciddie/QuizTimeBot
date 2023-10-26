@@ -3,19 +3,19 @@ package de.sciddie.quiztimebot.game;
 import java.util.HashMap;
 
 public class GameHandler {
-    private HashMap<String , Game> games = new HashMap<>();
+    private static Game game;
 
-    public Game getGame(String ServerId) {
-        return games.get(ServerId);
+    public static Game getGame() {
+        return game;
     }
 
-    public void stopGame(String id) {
-        games.remove(id);
+    public static void stopGame() {
+        game = null;
     }
 
-    public Game startGame(String serverId, String[] teamNames, String gameleaderChannelId) {
+    public static Game startGame(String serverId, String[] teamNames, String gameleaderChannelId) {
         Game game = new Game(teamNames, gameleaderChannelId);
-        games.put(serverId, game);
+        GameHandler.game = game;
         return game;
     }
 }
