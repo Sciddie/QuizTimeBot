@@ -13,7 +13,7 @@ public class GameHandler {
         game = null;
     }
 
-    public static Game startGame(String serverId, String[] teamNames, String gameleaderChannelId) {
+    public static Game startGame(String[] teamNames, String gameleaderChannelId) {
         Game game = new Game(teamNames, gameleaderChannelId);
         GameHandler.game = game;
         return game;
