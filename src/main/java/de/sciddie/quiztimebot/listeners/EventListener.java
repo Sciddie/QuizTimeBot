@@ -83,6 +83,9 @@ public class EventListener extends ListenerAdapter {
             } else {
                 event.reply("Ihr habt die Antwort " + event.getOption("antwort").getAsString()
                         + " abgegeben").queue();
+                String teamName = event.getMember().getRoles().get(0).getName();
+                GameHandler.getGame().nextQuestion(event.getChannel().asTextChannel(), teamName);
+                GameHandler.getGame().gameLeaderChannel.sendMessage("Team: " + teamName + " \"Kosten auf der Karte sind " + event.getOption("antwort").getAsString() + "\"").queue();
             }
         }
     }

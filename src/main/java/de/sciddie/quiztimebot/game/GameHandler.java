@@ -76,9 +76,9 @@ public class GameHandler {
         eb.setTitle("Wilkommen bei QuizTime");
         eb.setDescription("Wähle dein Team!");
         event.getHook().sendMessageEmbeds(eb.build()).addActionRow(
-                net.dv8tion.jda.api.interactions.components.buttons.Button.primary("blue", "Blau"),
-                net.dv8tion.jda.api.interactions.components.buttons.Button.danger("red", "Rot"),
-                net.dv8tion.jda.api.interactions.components.buttons.Button.secondary("magenta", "Magenta"),
+                Button.primary("blue", "Blau"),
+                Button.danger("red", "Rot"),
+                Button.secondary("magenta", "Magenta"),
                 Button.success("green", "Grün")
         ).queue((message -> GameHandler.selectionMessage = message
         ));
