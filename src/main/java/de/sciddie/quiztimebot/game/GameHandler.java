@@ -2,10 +2,7 @@ package de.sciddie.quiztimebot.game;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.IPermissionHolder;
-import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.Channel;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
@@ -18,10 +15,10 @@ import java.util.HashMap;
 import java.util.List;
 
 public class GameHandler {
-    public static TextChannel channel1;
-    public static TextChannel channel2;
-    public static TextChannel channel3;
-    public static TextChannel channel4;
+    public static TextChannel channelRed;
+    public static TextChannel channelBlue;
+    public static TextChannel channelMagenta;
+    public static TextChannel channelGreen;
     private static Game game;
 
     public static Game getGame() {
@@ -48,25 +45,25 @@ public class GameHandler {
             Role role = event.getGuild().createRole()
                     .setName("Rot")
                     .setColor(Color.RED).complete();
-            channel1.upsertPermissionOverride(role).setAllowed(Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND).queue();
+            channelRed.upsertPermissionOverride(role).setAllowed(Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND).queue();
         }
         if (!rolenames.contains("Blau")) {
             Role role = event.getGuild().createRole()
                     .setName("Blau")
                     .setColor(Color.BLUE).complete();
-            channel2.upsertPermissionOverride(role).setAllowed(Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND).queue();
+            channelBlue.upsertPermissionOverride(role).setAllowed(Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND).queue();
         }
         if (!rolenames.contains("Magenta")) {
             Role role = event.getGuild().createRole()
                     .setName("Magenta")
                     .setColor(Color.MAGENTA).complete();
-            channel3.upsertPermissionOverride(role).setAllowed(Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND).queue();
+            channelMagenta.upsertPermissionOverride(role).setAllowed(Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND).queue();
         }
         if (!rolenames.contains("Grün")) {
             Role role = event.getGuild().createRole()
                     .setName("Grün")
                     .setColor(Color.GREEN).complete();
-            channel4.upsertPermissionOverride(role).setAllowed(Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND).queue();
+            channelGreen.upsertPermissionOverride(role).setAllowed(Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND).queue();
         }
 
         EmbedBuilder start = new EmbedBuilder();
@@ -83,5 +80,9 @@ public class GameHandler {
                 net.dv8tion.jda.api.interactions.components.buttons.Button.secondary("magenta", "Magenta"),
                 Button.success("green", "Grün")
         ).queue();
+    }
+
+    public static TextChannel[] getChannelList(MessageEmbed embed) {
+        return new TextChannel[] {channelMagenta,channelRed,channelBlue,channelGreen};
     }
 }

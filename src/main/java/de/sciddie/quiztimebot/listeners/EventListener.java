@@ -70,10 +70,10 @@ public class EventListener extends ListenerAdapter {
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
         String command = event.getName();
         if (command.equals("start")) {
-            GameHandler.channel1 = event.getOption("channel1").getAsChannel().asTextChannel();
-            GameHandler.channel2 = event.getOption("channel2").getAsChannel().asTextChannel();
-            GameHandler.channel3 = event.getOption("channel3").getAsChannel().asTextChannel();
-            GameHandler.channel4 = event.getOption("channel4").getAsChannel().asTextChannel();
+            GameHandler.channelRed = event.getOption("rot").getAsChannel().asTextChannel();
+            GameHandler.channelBlue = event.getOption("blau").getAsChannel().asTextChannel();
+            GameHandler.channelMagenta = event.getOption("magenta").getAsChannel().asTextChannel();
+            GameHandler.channelGreen = event.getOption("grün").getAsChannel().asTextChannel();
             GameHandler.sendTeamSelectionMessage(event);
         }
         if (command.equals("answer")) {
@@ -89,11 +89,11 @@ public class EventListener extends ListenerAdapter {
     @Override
     public void onGuildReady(GuildReadyEvent event) {
         List<CommandData> commandData = new ArrayList<>();
-        OptionData channel1 = new OptionData(OptionType.CHANNEL, "channel1", "Channel", true);
-        OptionData channel2 = new OptionData(OptionType.CHANNEL, "channel2", "Channel", true);
-        OptionData channel3 = new OptionData(OptionType.CHANNEL, "channel3", "Channel", true);
-        OptionData channel4 = new OptionData(OptionType.CHANNEL, "channel4", "Channel", true);
-        commandData.add(Commands.slash("start", "Start the Quiz Game").addOptions(channel1,channel2,channel3,channel4));
+        OptionData channelRed = new OptionData(OptionType.CHANNEL, "rot", "Channel", true);
+        OptionData channelBlue = new OptionData(OptionType.CHANNEL, "blau", "Channel", true);
+        OptionData channelMagenta = new OptionData(OptionType.CHANNEL, "magenta", "Channel", true);
+        OptionData channelGreen = new OptionData(OptionType.CHANNEL, "grün", "Channel", true);
+        commandData.add(Commands.slash("start", "Start the Quiz Game").addOptions(channelRed,channelBlue,channelMagenta,channelGreen));
         OptionData option1 = new OptionData(OptionType.STRING, "antwort", "Euer Ergebnis", true);
         commandData.add(Commands.slash("answer", "Antwort im Spiel Abgeben").addOptions(option1));
         event.getGuild().updateCommands().addCommands(commandData).queue();

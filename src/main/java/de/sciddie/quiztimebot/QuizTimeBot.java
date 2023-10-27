@@ -1,6 +1,7 @@
 package de.sciddie.quiztimebot;
 
 import de.sciddie.quiztimebot.game.GameHandler;
+import de.sciddie.quiztimebot.listeners.ButtonListenerGame;
 import de.sciddie.quiztimebot.listeners.EventListener;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
@@ -18,6 +19,7 @@ public class QuizTimeBot {
                 .setActivity(Activity.customStatus("Is watching you"));
         shardManager = builder.build();
         shardManager.addEventListener(new EventListener());
+        shardManager.addEventListener(new ButtonListenerGame());
     }
 
     public static void main(String[] args) {
