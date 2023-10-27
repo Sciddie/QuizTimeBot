@@ -1,5 +1,6 @@
 package de.sciddie.quiztimebot.listeners;
 
+import de.sciddie.quiztimebot.game.GameHandler;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
@@ -8,8 +9,11 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.Command;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.requests.RestAction;
 
@@ -22,7 +26,16 @@ public class EventListener extends ListenerAdapter {
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event) {
         if (event.getButton().getId().equals("start")) {
-
+            List<Role> roles = event.getGuild().getRoles();
+            List<String> teamNameList = new ArrayList<String>();
+            for (Role role : roles) {
+                if (!event.getGuild().getMembersWithRoles(role).isEmpty()){
+                    teamNameList.add(role.getName());
+                }
+            }
+            String[] teamNames = new String[teamNameList.size()];
+            teamNames = teamNameList.toArray(teamNames);
+            GameHandler.startGame(event.getUser(), event.getChannel(), teamNames);
             return;
         }
 
@@ -57,53 +70,32 @@ public class EventListener extends ListenerAdapter {
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
         String command = event.getName();
         if (command.equals("start")) {
-            List<Role> roles = event.getGuild().getRoles();
-            List<String> rolenames = new ArrayList<>();
-            for (Role i : roles) {
-                rolenames.add(i.getName());
+            GameHandler.channel1 = event.getOption("channel1").getAsChannel().asTextChannel();
+            GameHandler.channel2 = event.getOption("channel2").getAsChannel().asTextChannel();
+            GameHandler.channel3 = event.getOption("channel3").getAsChannel().asTextChannel();
+            GameHandler.channel4 = event.getOption("channel4").getAsChannel().asTextChannel();
+            GameHandler.sendTeamSelectionMessage(event);
+        }
+        if (command.equals("answer")) {
+            if (GameHandler.getGame() == null) {
+                event.reply("Es Läuft gerade kein Spiel").setEphemeral(true).queue();
+            } else {
+                event.reply("Ihr habt die Antwort " + event.getOption("antwort").getAsString()
+                        + " abgegeben").queue();
             }
-            if (!rolenames.contains("Rot")) {
-                event.getGuild().createRole()
-                        .setName("Rot")
-                        .setColor(Color.RED).complete();
-            }
-            if (!rolenames.contains("Blau")) {
-                event.getGuild().createRole()
-                        .setName("Blau")
-                        .setColor(Color.BLUE).complete();
-            }
-            if (!rolenames.contains("Magenta")) {
-                event.getGuild().createRole()
-                        .setName("Magenta")
-                        .setColor(Color.MAGENTA).complete();
-            }
-            if (!rolenames.contains("Grün")) {
-                event.getGuild().createRole()
-                        .setName("Grün")
-                        .setColor(Color.GREEN).complete();
-            }
-
-            EmbedBuilder start = new EmbedBuilder();
-            start.setTitle("Start Game");
-            start.setDescription("Erst wenn jeder in einem Team ist!");
-            event.replyEmbeds(start.build()).setEphemeral(true).addActionRow(Button.success("start", "Starten")).queue();
-
-            EmbedBuilder eb = new EmbedBuilder();
-            eb.setTitle("Wilkommen bei QuizTime");
-            eb.setDescription("Wähle dein Team!");
-            event.getHook().sendMessageEmbeds(eb.build()).addActionRow(
-                    Button.primary("blue", "Blau"),
-                    Button.danger("red", "Rot"),
-                    Button.secondary("magenta", "Magenta"),
-                    Button.success("green", "Grün")
-            ).queue();
         }
     }
 
     @Override
     public void onGuildReady(GuildReadyEvent event) {
         List<CommandData> commandData = new ArrayList<>();
-        commandData.add(Commands.slash("start", "Start the Quiz Game"));
+        OptionData channel1 = new OptionData(OptionType.CHANNEL, "channel1", "Channel", true);
+        OptionData channel2 = new OptionData(OptionType.CHANNEL, "channel2", "Channel", true);
+        OptionData channel3 = new OptionData(OptionType.CHANNEL, "channel3", "Channel", true);
+        OptionData channel4 = new OptionData(OptionType.CHANNEL, "channel4", "Channel", true);
+        commandData.add(Commands.slash("start", "Start the Quiz Game").addOptions(channel1,channel2,channel3,channel4));
+        OptionData option1 = new OptionData(OptionType.STRING, "antwort", "Euer Ergebnis", true);
+        commandData.add(Commands.slash("answer", "Antwort im Spiel Abgeben").addOptions(option1));
         event.getGuild().updateCommands().addCommands(commandData).queue();
     }
 }
