@@ -20,6 +20,7 @@ public class GameHandler {
     public static TextChannel channelMagenta;
     public static TextChannel channelGreen;
     private static Game game;
+    private static Message selectionMessage;
 
     public static Game getGame() {
         return game;
@@ -79,7 +80,8 @@ public class GameHandler {
                 net.dv8tion.jda.api.interactions.components.buttons.Button.danger("red", "Rot"),
                 net.dv8tion.jda.api.interactions.components.buttons.Button.secondary("magenta", "Magenta"),
                 Button.success("green", "Grün")
-        ).queue();
+        ).queue((message -> GameHandler.selectionMessage = message
+        ));
     }
 
     public static TextChannel[] getChannelList(MessageEmbed embed) {

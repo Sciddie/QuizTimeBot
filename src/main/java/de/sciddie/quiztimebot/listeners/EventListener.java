@@ -36,6 +36,7 @@ public class EventListener extends ListenerAdapter {
             String[] teamNames = new String[teamNameList.size()];
             teamNames = teamNameList.toArray(teamNames);
             GameHandler.startGame(event.getUser(), event.getChannel(), teamNames);
+            ButtonListenerGame.removeButtons(event.getMessage());
             return;
         }
 
