@@ -3,6 +3,7 @@ package de.sciddie.quiztimebot.listeners;
 import de.sciddie.quiztimebot.game.GameHandler;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -27,16 +28,33 @@ public class EventListener extends ListenerAdapter {
     public void onButtonInteraction(ButtonInteractionEvent event) {
         if (event.getButton().getId().equals("start")) {
             List<Role> roles = event.getGuild().getRoles();
-            List<String> teamNameList = new ArrayList<String>();
+            List<String> teamNameList = new ArrayList<>();
+            List<TextChannel> teamChannels = new ArrayList<>();
             for (Role role : roles) {
                 if (!event.getGuild().getMembersWithRoles(role).isEmpty()){
-                    teamNameList.add(role.getName());
+                    String name = role.getName();
+                    teamNameList.add(name);
+                    switch(name.toLowerCase()){
+                        case "rot":
+                            teamChannels.add(GameHandler.channelRed);
+                            break;
+                        case "grün":
+                            teamChannels.add(GameHandler.channelGreen);
+                            break;
+                        case "blau":
+                            teamChannels.add(GameHandler.channelBlue);
+                            break;
+                        case "magenta":
+                            teamChannels.add(GameHandler.channelMagenta);
+                            break;
+                    }
                 }
             }
             String[] teamNames = new String[teamNameList.size()];
             teamNames = teamNameList.toArray(teamNames);
-            GameHandler.startGame(event.getUser(), event.getChannel(), teamNames);
-            ButtonListenerGame.removeButtons(event.getMessage());
+            GameHandler.startGame(event.getUser(), event.getChannel(), teamNames, teamChannels);
+            ButtonListenerGame.removeButtons(GameHandler.selectionMessage);
+            event.getMessage().delete().queue();
             return;
         }
 

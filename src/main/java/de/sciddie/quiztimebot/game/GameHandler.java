@@ -5,13 +5,11 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.Channel;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
-import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class GameHandler {
@@ -20,7 +18,7 @@ public class GameHandler {
     public static TextChannel channelMagenta;
     public static TextChannel channelGreen;
     private static Game game;
-    private static Message selectionMessage;
+    public static Message selectionMessage;
 
     public static Game getGame() {
         return game;
@@ -30,9 +28,10 @@ public class GameHandler {
         game = null;
     }
 
-    public static Game startGame(User gameleaderId, Channel gameChannelId, String[] teamNames) {
+    public static Game startGame(User gameleaderId, Channel gameChannelId, String[] teamNames, List<TextChannel> teamChannels) {
         Game game = new Game(teamNames, gameleaderId, gameChannelId);
         GameHandler.game = game;
+        game.startGame(teamChannels);
         return game;
     }
 
@@ -70,7 +69,7 @@ public class GameHandler {
         EmbedBuilder start = new EmbedBuilder();
         start.setTitle("Start Game");
         start.setDescription("Erst wenn jeder in einem Team ist!");
-        event.replyEmbeds(start.build()).setEphemeral(true).addActionRow(net.dv8tion.jda.api.interactions.components.buttons.Button.success("start", "Starten")).queue();
+        event.replyEmbeds(start.build()).addActionRow(net.dv8tion.jda.api.interactions.components.buttons.Button.success("start", "Starten")).queue();
 
         EmbedBuilder eb = new EmbedBuilder();
         eb.setTitle("Wilkommen bei QuizTime");

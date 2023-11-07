@@ -9,12 +9,12 @@ import net.dv8tion.jda.api.utils.messages.MessageEditData;
 public class ButtonListenerGame extends ListenerAdapter {
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event) {
-        if (event.getButton().getId().equals("next")) {
+        if (event.getButton().getId().contains("next")) {
             String teamName = event.getMember().getRoles().get(0).getName();
             GameHandler.getGame().nextQuestion(event.getChannel().asTextChannel(), teamName);
             removeButtons(event.getMessage());
         }
-        else if (event.getButton().getId().equals("right")) {
+        else if (event.getButton().getId().contains("right")) {
             String teamName = event.getMember().getRoles().get(0).getName();
             GameHandler.getGame().addPoint(teamName);
             GameHandler.getGame().nextQuestion(event.getChannel().asTextChannel(), teamName);

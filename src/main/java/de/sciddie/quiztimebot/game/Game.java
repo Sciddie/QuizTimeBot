@@ -1,15 +1,14 @@
 package de.sciddie.quiztimebot.game;
 
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.Channel;
 import net.dv8tion.jda.api.entities.channel.concrete.PrivateChannel;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
-import java.security.PrivateKey;
 import java.util.HashMap;
+import java.util.List;
 
 public class Game {
     public PrivateChannel gameLeaderChannel; //may be null shortly after creation
@@ -17,7 +16,7 @@ public class Game {
     private int[] questionNumber;  //Position in the Question File
     private int[] teamPoints;
     private final String[] teamNames;
-    private HashMap<String,Integer> teamNums;
+    private HashMap<String,Integer> teamNums = new HashMap<>();
     public Game(String[] teamNames, User gameleaderId, Channel gameChannel) {
         this.gameChannel = gameChannel;
         gameleaderId.openPrivateChannel().queue(privateChannel -> this.gameLeaderChannel = privateChannel);
@@ -39,15 +38,21 @@ public class Game {
         teamPoints[index]++;
     }
 
+    public void startGame(List<TextChannel> channels) {
+        for (TextChannel i : channels) {
+            question1(i);
+        }
+    }
+
     private void question1(TextChannel channel) {
         // Osteria da Gino Kosten zusammen rechnen Karte
         EmbedBuilder eb = new EmbedBuilder()
                 .setTitle("Geht zum Osteria da Gino")
                 .setDescription("Schaut euch die Karte außen an.\nWie viel Kostet alles zusammen?");
         channel.sendMessageEmbeds(eb.build()).addActionRow(
-                Button.primary("next", ""),
-                Button.primary("next", ""),
-                Button.primary("right", "") //TODO: Werte Einfügen
+                Button.primary("next_1", "1"),
+                Button.primary("next_2", "2"),
+                Button.primary("right", "3") //TODO: Werte Einfügen
         ).queue();
     }
     private void question2(TextChannel channel) {
@@ -56,9 +61,9 @@ public class Game {
                 .setTitle("Osteria da Gino")
                 .setDescription("Weche schriftfarbe hat das Logo?");
         channel.sendMessageEmbeds(eb.build()).addActionRow(
-                Button.primary("right", ""),
-                Button.primary("next", ""),
-                Button.primary("next", "") //TODO: Werte Einfügen
+                Button.primary("right_gd", "1"),
+                Button.primary("next_1", "3"),
+                Button.primary("next_2", "2") //TODO: Werte Einfügen
         ).queue();
     }
     private void question3(TextChannel channel) {
@@ -71,9 +76,9 @@ public class Game {
                 .setTitle("Geht zum Rathaus")
                 .setDescription("Wie heißt unser Oberbürgermeister?");
         channel.sendMessageEmbeds(eb.build()).addActionRow(
-                Button.primary("next", ""),
-                Button.primary("next", ""),
-                Button.primary("right", "") //TODO: Werte Einfügen
+                Button.primary("next_1", "1"),
+                Button.primary("next_2", "2"),
+                Button.primary("right", "3") //TODO: Werte Einfügen
         ).queue();
     }
     private void question5(TextChannel channel) {
@@ -91,9 +96,9 @@ public class Game {
                 .setTitle("Gehe zu Ali Gebäudereinigung")
                 .setDescription("Wie Lautet der name der Zwischenstraße?");
         channel.sendMessageEmbeds(eb.build()).addActionRow(
-                Button.primary("right", ""),
-                Button.primary("next", ""),
-                Button.primary("next", "")//TODO: Werte Einfügen
+                Button.primary("right", "1"),
+                Button.primary("next_1", "2"),
+                Button.primary("next_2", "3")//TODO: Werte Einfügen
         ).queue();
     }
     private void question7(TextChannel channel) {
@@ -111,9 +116,9 @@ public class Game {
                 .setTitle("Geht zur Stiftskirche")
                 .setDescription("Wie viele Glocken Stehen draußen");
         channel.sendMessageEmbeds(eb.build()).addActionRow(
-                Button.primary("right", ""),
-                Button.primary("next", ""),
-                Button.primary("next", "")//TODO: Werte Einfügen
+                Button.primary("right", "1"),
+                Button.primary("next_1", "2"),
+                Button.primary("next_2", "3")//TODO: Werte Einfügen
         ).queue();
     }
     private void question9(TextChannel channel) {
@@ -131,9 +136,9 @@ public class Game {
                 .setTitle("Stiftskirche")
                 .setDescription("Welche Farbe hat die Stiftskirchen Uhr vom Schlossberg aus?");
         channel.sendMessageEmbeds(eb.build()).addActionRow(
-                Button.primary("right", ""),
-                Button.primary("next", ""),
-                Button.primary("next", "")//TODO: Werte Einfügen
+                Button.primary("right", "1"),
+                Button.primary("next_1", "2"),
+                Button.primary("next_2", "3")//TODO: Werte Einfügen
         ).queue();
     }
     private void question11(TextChannel channel) {
